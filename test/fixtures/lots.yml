@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  lot_name: MyString
+  lot_area: 1
+  lot_available_area: 1
+
+two:
+  lot_name: MyString
+  lot_area: 1
+  lot_available_area: 1

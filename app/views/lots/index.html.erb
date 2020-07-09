@@ -1,0 +1,24 @@
+<h1>TODOS LOS LOTES</h1>
+ 
+<table>
+  <tr>
+    <th>NOMBRE LOTE</th>
+    <th>AREA TOTAL</th>
+    <th>AREA DISPONIBLE</th>
+    <th></th>
+  </tr>
+ 
+  <% @lots.each do |lot| %>
+    <tr>
+      <td><%= lot.lot_name %></td>
+      <td><%= lot.lot_area %></td>
+      <td><%= lot.lot_available_area %></td>
+      <td><%= link_to 'Show', lot_path(lot) %> | <%= link_to 'Edit', edit_lot_path(lot) %> | <%= link_to 'Destroy', lot_path(lot),
+              method: :delete,
+              data: { confirm: 'Are you sure?' } %><</td>
+    </tr>
+  <% end %>
+</table>
+
+
+<%= link_to 'Nuevo Lote', new_lot_path %>

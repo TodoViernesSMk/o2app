@@ -1,0 +1,15 @@
+<p>
+  <strong>Title:</strong>
+  <%= @lot.lot_name %>
+</p>
+ 
+<p>
+  <strong>Title:</strong>
+  <%= @lot.lot_area %>
+</p>
+<p>
+  <strong>Title:</strong>
+  <%= @lot.lot_available_area %>
+</p>
+<%= link_to 'Edit', edit_lot_path(@lot) %> |
+<%= link_to 'Back', lots_path %>
