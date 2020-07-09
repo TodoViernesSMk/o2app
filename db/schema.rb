@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200709001306) do
+ActiveRecord::Schema.define(version: 20200709022523) do
+
+  create_table "codes", force: :cascade do |t|
+    t.string "code_name"
+    t.integer "code_area"
+    t.boolean "code_status"
+    t.integer "lot_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lot_id"], name: "index_codes_on_lot_id"
+  end
 
   create_table "lots", force: :cascade do |t|
     t.string "lot_name"
