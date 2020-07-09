@@ -1,15 +1,48 @@
 <p>
-  <strong>Title:</strong>
+  <strong>LOT NAME:</strong><br>
   <%= @lot.lot_name %>
 </p>
  
 <p>
-  <strong>Title:</strong>
+  <strong>LOT AREA:</strong><br>
   <%= @lot.lot_area %>
 </p>
 <p>
-  <strong>Title:</strong>
+  <strong>LOT AVAILABLE AREA:</strong><br>
   <%= @lot.lot_available_area %>
 </p>
+<h2>CODIGOS:</h2>
+<% @lot.codes.each do |code| %>
+  <p>
+    <strong>CODE NAME</strong><br>
+    <%= code.code_name%>
+  </p>
+  <p>
+    <strong>AREA</strong><br>
+    <%= code.code_area%>
+  </p>
+  <p>
+    <strong>CODE STATUS</strong><br>
+    <%= code.code_status%>
+  </p>
+<% end %>
+<h2>AGREGAR CODIGOS:</h2>
+<%= form_with(model: [ @lot, @lot.codes.build ], local: true) do |form| %>
+  <p>
+    <%= form.label :code_name %><br>
+    <%= form.text_field :code_name %>
+  </p>
+  <p>
+    <%= form.label :code_area %><br>
+    <%= form.number_field :code_area %>
+  </p>
+  <p>
+    <%= form.label :code_status %><br>
+    <%= form.text_field :code_status %>
+  </p>
+  <p>
+    <%= form.submit %>
+  </p>
+<% end %>
 <%= link_to 'Edit', edit_lot_path(@lot) %> |
 <%= link_to 'Back', lots_path %>
