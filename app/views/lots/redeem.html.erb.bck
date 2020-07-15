@@ -1,0 +1,49 @@
+<h1>REDEEM</h1>
+<%= @error %>
+Name: <%= @lot.lot_name %>
+<br>
+Area: <%= @lot.lot_area %>
+<br>
+Available Area: <%= @lot.lot_available_area %>
+<br>
+Lot ID: <%= @lot.id %>
+
+<br>
+update: <%= @lot.updated_at %>
+<br>
+<%= @lot.codes.each do |code| %>
+    <%= code.code_name %>
+<% end %>
+
+<div>
+
+<hr>
+<% @lot.codes.each do |code| %>
+  <p>
+    <strong>CODE NAME</strong><br>
+    <%= code.code_name%>
+  </p>
+  <p>
+    <strong>AREA</strong><br>
+    <%= code.code_area%>
+  </p>
+  <p>
+    <strong>CODE STATUS</strong><br>
+    <%= code.code_status%>
+  </p>
+<% end %>
+   
+</div>
+
+
+<% form_with model: @lot, local: true  do |f| %>
+  <%= f.text_field :lot_size %>
+  <%= submit_tag "Create" %>
+<% end %>
+
+<%= form_for :lots, url: "/redeem" do |form| %>
+  <%= form.text_field :code_name %>
+  <%= form.text_field :id %>
+  <%= form.text_field :lot_id %>
+  <%= form.submit  %>
+<% end  %>

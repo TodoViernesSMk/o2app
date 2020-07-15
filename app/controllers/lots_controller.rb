@@ -2,14 +2,9 @@ class LotsController < ApplicationController
 	def index
 		@lots = Lot.all
 	end
-	
+
 	def show
-    @lot = Lot.find(params[:id])
-    lot = Lot.find_by(id: params[:id])
-    puts lot
-    # lot_id = :id
-    # codes = @codes.lot
-		# render json: lot.to_json(include[:codes])
+		@lot = Lot.find(params[:id])
 	end
 
 	def new
@@ -41,6 +36,8 @@ class LotsController < ApplicationController
 			render 'edit'
 		end
 	end
+
+	
 
 	def destroy
 		@lot = Lot.find(params[:id])
