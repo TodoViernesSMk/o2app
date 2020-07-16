@@ -18,7 +18,35 @@ class CodesController < ApplicationController
 		# end
 		# @code = Code.find(params[:id])
 		# @codeCode = Code.first
-		@code = Code.find(params[:id])
+		# byebug
+		@code = Code.find(params[:code_id])
+		@lot = @code.lot
+		@code.code_status = false
+		@lot.lot_available_area = @lot.lot_available_area - @code.code_area
+		if @code.save && @lot.save
+			respond_to do |res|
+				res.json { 
+					render :json => {
+						code: { 
+							codeId: @code.id,
+							codeStatus: @code.code_status
+						}, lot: {
+							lotId: @lot.id,
+							lotAvailableArea: @lot.lot_available_area
+						}	
+					}
+				}
+			end
+		end
+
+		# get code
+		# update code status to false
+		# update available land for the lot the code belongs to
+
+		# example for executing sql with placeholders
+		# $db.execute('insert into customers (id, name, type) values (?, ?, ?)', 11, x, y)
+	
+		
 		# @code = @codes.find_by(@codes.code_name)
 		# @lotId = Code.find_by(@codename.lot_id)
 		# @lot = Lot.find_by(id: @lotId)

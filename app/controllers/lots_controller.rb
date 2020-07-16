@@ -4,7 +4,28 @@ class LotsController < ApplicationController
 	end
 
 	def show
+		# connection = ActiveRecord::Base.connection
+		# # returns total area being used by redeemed codes
+		# codes_used_q = %Q(
+		# 	SELECT code_status, SUM(code_area) AS total_code_area_used
+		# 	FROM codes
+		# 	INNER JOIN lots
+		# 		ON codes.lot_id = lots.id
+		# 	GROUP BY code_status
+		# 		HAVING code_status = 'f';
+		# 	)
+			
+		# @total_area_used_by_codes = connection.execute(codes_used_q)
 		@lot = Lot.find(params[:id])
+		
+		# refactor this
+		# if @total_area_used_by_codes.size > 0
+		# 	@lot_available_area = @lot.lot_area - @total_area_used_by_codes[0]['total_code_area_used']
+		# else
+		# 	@lot_available_area = @lot.lot_area
+		# end
+			
+
 	end
 
 	def new

@@ -1,30 +1,56 @@
-<p>
+<%# content_for :javascript_includes do %>
+  <%#= javascript_include_tag "lots.js" %>
+<%# end %>
+<p class="lot-name">
   <strong>LOT NAME:</strong><br>
-  <%= @lot.lot_name %>
+  <div>
+    <%= @lot.lot_name %>
+  </div>
 </p>
  
-<p>
+<p class="lot-area">
   <strong>LOT AREA:</strong><br>
-  <%= @lot.lot_area %>
+  <div>
+    <%= @lot.lot_area %>
+  </div>
 </p>
-<p>
+<p class="lot-available-area">
   <strong>LOT AVAILABLE AREA:</strong><br>
-  <%= @lot.lot_available_area %>
+  <div>
+    <%= @lot.lot_available_area %>
+  </div>
 </p>
 <h2>CODIGOS:</h2>
+
 <% @lot.codes.each do |code| %>
-  <p>
-    <strong>CODE NAME</strong><br>
-    <%= code.code_name%>
-  </p>
-  <p>
-    <strong>AREA</strong><br>
-    <%= code.code_area%>
-  </p>
-  <p>
-    <strong>CODE STATUS</strong><br>
-    <%= code.code_status%>
-  </p>
+  <div data-code-id="<%= code.id %>">
+    <p class="code-name">
+      <strong>CODE NAME</strong><br>
+      <div>
+        <%= code.code_name %>
+      </div>
+    </p>
+    <p class="code-area">
+      <strong>AREA</strong><br>
+      <div>
+        <%= code.code_area %>
+      </div>
+    </p>
+    <p class="code-status">
+      <strong>CODE STATUS</strong><br>
+      <div>
+        <%= code.code_status %>
+      </div>
+    </p>
+    <div class="replace-link">
+      <% if code.code_status == true %>
+        <a style="color: blue;" class="redeem-code" data-remote="true" data-code-id=<%= code.id %> >Redeem</a>
+      <% else %>
+        <a class="redeemed">Redeem</a>
+      <% end %>
+    </div>
+  </div>
+  <div style="height: 10px; background-color: black;"></div>
 <% end %>
 <h2>AGREGAR CODIGOS:</h2>
 <%= form_with(model: [ @lot, @lot.codes.build ], local: true) do |form| %>
@@ -46,3 +72,39 @@
 <% end %>
 <%= link_to 'Edit', edit_lot_path(@lot) %> |
 <%= link_to 'Back', lots_path %>
+
+<script>
+
+window.addEventListener('DOMContentLoaded', function() {
+  console.log('window - DOMContentLoaded - capture');
+
+  document.querySelectorAll("a.redeem-code").forEach(ele => {
+    ele.addEventListener('click', function(e){
+      var request = new XMLHttpRequest();
+      request.responseType = 'json';
+      request.open( 'POST', '/redeem', true );
+      // set headers
+      request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      request.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+
+      request.onload = function(){
+        var redeem = "<a class='redeemed'>Redeem</a>";
+        var codeId = this.response.code.codeId;
+        var lotAvailableArea = this.response.lot.lotAvailableArea;
+        var $currentSection = $("[data-code-id=" + codeId + "]");
+        var redeemLink = $currentSection.find(".replace-link");
+        var $lotAvailableArea = $(".lot-available-area").next()[0]
+        var $codeStatus = $currentSection.find(".code-status").next();
+
+        redeemLink.empty();
+        redeemLink.append(redeem);
+        $lotAvailableArea.innerText = lotAvailableArea;
+        $codeStatus[0].innerText = this.response.code.codeStatus;
+        // debugger;
+      };
+
+      request.send( 'code_id=' + this.dataset.codeId );
+    })
+  });
+}, true);
+</script>
