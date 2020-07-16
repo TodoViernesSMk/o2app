@@ -127,14 +127,12 @@ window.addEventListener('DOMContentLoaded', function() {
         var lotAvailableArea = this.response.lot.lotAvailableArea;
         var $currentSection = $("[data-code-id=" + codeId + "]");
         var redeemLink = $currentSection.find(".replace-link");
-        var $lotAvailableArea = $(".lot-available-area").next()[0]
+        var $lotAvailableArea = $(".lot-available-area").find("span")[0];
         var $codeStatus = $currentSection.find(".code-status").next();
-
         redeemLink.empty();
         redeemLink.append(redeem);
         $lotAvailableArea.innerText = lotAvailableArea;
         $codeStatus[0].innerText = this.response.code.codeStatus;
-        // debugger;
       };
 
       request.send( 'code_id=' + this.dataset.codeId );
