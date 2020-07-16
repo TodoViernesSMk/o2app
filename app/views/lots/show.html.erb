@@ -1,77 +1,111 @@
+<div id="lots-container" class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+    <h4>LOT INFO:</h4>
+      <span class="lot-name">
+        <strong>LOT NAME:</strong>
+        <span>
+          <%= @lot.lot_name %>
+        </span>
+      </span>
+      |
+      <span class="lot-area">
+        <strong>LOT AREA:</strong>
+        <span>
+          <%= @lot.lot_area %>
+        </span>
+      </span>
+      |
+      <span class="lot-available-area">
+        <strong>LOT AVAILABLE AREA:</strong>
+        <span>
+          <%= @lot.lot_available_area %>
+        </span>
+      </span>
+    </div>  
+  </div>  
+</div>
 <%# content_for :javascript_includes do %>
   <%#= javascript_include_tag "lots.js" %>
 <%# end %>
-<p class="lot-name">
-  <strong>LOT NAME:</strong><br>
-  <div>
-    <%= @lot.lot_name %>
-  </div>
-</p>
- 
-<p class="lot-area">
-  <strong>LOT AREA:</strong><br>
-  <div>
-    <%= @lot.lot_area %>
-  </div>
-</p>
-<p class="lot-available-area">
-  <strong>LOT AVAILABLE AREA:</strong><br>
-  <div>
-    <%= @lot.lot_available_area %>
-  </div>
-</p>
-<h2>CODIGOS:</h2>
 
-<% @lot.codes.each do |code| %>
-  <div data-code-id="<%= code.id %>">
-    <p class="code-name">
-      <strong>CODE NAME</strong><br>
-      <div>
-        <%= code.code_name %>
+ 
+
+<div id="codes-container" class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-md-12">
+      <h4>CODES:</h4>
+      <hr>
+    </div>
+    <% @lot.codes.each do |code| %>
+      <div class="col-md-4 p-2" data-code-id="<%= code.id %>">
+        <div class="card m-1 p-1">
+          <p class="code-name">
+            <strong>CODE NAME</strong>
+            <span>
+              <%= code.code_name %>
+            </span>
+          </p>
+          <p class="code-area">
+            <strong>AREA</strong>
+            <span>
+              <%= code.code_area %>
+            </span>
+          </p>
+          <p class="code-status">
+            <strong>CODE STATUS</strong>
+            <span>
+              <%= code.code_status %>
+            </span>
+          </p>
+          <span class="replace-link">
+            <% if code.code_status == true %>
+              <a style="color: blue;" class="redeem-code btn btn-default btn-warning" data-remote="true" data-code-id=<%= code.id %> >Redeem</a>
+            <% else %>
+              <a class="redeemed btn btn-default disabled btn-secondary">Code Redeemed</a>
+            <% end %>
+          </span>
+        </div>
       </div>
-    </p>
-    <p class="code-area">
-      <strong>AREA</strong><br>
-      <div>
-        <%= code.code_area %>
-      </div>
-    </p>
-    <p class="code-status">
-      <strong>CODE STATUS</strong><br>
-      <div>
-        <%= code.code_status %>
-      </div>
-    </p>
-    <div class="replace-link">
-      <% if code.code_status == true %>
-        <a style="color: blue;" class="redeem-code" data-remote="true" data-code-id=<%= code.id %> >Redeem</a>
-      <% else %>
-        <a class="redeemed">Redeem</a>
+      <div style="height: 10px; background-color: black;"></div>
+    <% end %>
+  </div>
+</div>
+<div id="add-codes-container" class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-md-12">
+      <h5>ADD CODES TO LOT:</h5>
+    </div>
+    <div class="col-md-12">
+      <%= form_with(model: [ @lot, @lot.codes.build ], local: true) do |form| %>
+        <p>
+          <%= form.label :code_name %><br>
+          <%= form.text_field :code_name %>
+        </p>
+        <p>
+          <%= form.label :code_area %><br>
+          <%= form.number_field :code_area %>
+        </p>
+        <p>
+          <%= form.label :code_status %><br>
+          <%= form.text_field :code_status %>
+        </p>
+        <p>
+          <%= form.submit %>
+        </p>
       <% end %>
     </div>
   </div>
-  <div style="height: 10px; background-color: black;"></div>
-<% end %>
-<h2>AGREGAR CODIGOS:</h2>
-<%= form_with(model: [ @lot, @lot.codes.build ], local: true) do |form| %>
-  <p>
-    <%= form.label :code_name %><br>
-    <%= form.text_field :code_name %>
-  </p>
-  <p>
-    <%= form.label :code_area %><br>
-    <%= form.number_field :code_area %>
-  </p>
-  <p>
-    <%= form.label :code_status %><br>
-    <%= form.text_field :code_status %>
-  </p>
-  <p>
-    <%= form.submit %>
-  </p>
-<% end %>
-<%= link_to 'Edit', edit_lot_path(@lot) %> |
-<%= link_to 'Back', lots_path %>
+</div>
+<div id="edit-lot-container" class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-md-12">
+      <%= link_to 'Edit', edit_lot_path(@lot) %> |
+      <%= link_to 'Back', lots_path %>
+    </div>
+  </div>
+</div>
+
 
 <script>
 
@@ -88,7 +122,7 @@ window.addEventListener('DOMContentLoaded', function() {
       request.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
 
       request.onload = function(){
-        var redeem = "<a class='redeemed'>Redeem</a>";
+        var redeem = "<a class='redeemed btn btn-default btn-secondary disabled'>Code Redeemed</a>";
         var codeId = this.response.code.codeId;
         var lotAvailableArea = this.response.lot.lotAvailableArea;
         var $currentSection = $("[data-code-id=" + codeId + "]");
